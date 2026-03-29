@@ -88,16 +88,11 @@ body {
 .question-number { font-size: 12px; font-weight: 500; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 12px; }
 .question-text { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 600; line-height: 1.8; color: var(--text-primary); margin-bottom: 36px; }
 
-.slider-container { padding: 0 4px; }
-.slider-labels { display: flex; justify-content: space-between; margin-bottom: 16px; }
-.slider-label { font-size: 11px; color: var(--text-muted); text-align: center; flex: 1; position: relative; cursor: pointer; padding: 4px 0; transition: color var(--transition); }
-.slider-label.active { color: var(--accent); font-weight: 500; }
-.slider-wrapper { position: relative; padding: 8px 0; }
-
-input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: var(--slider-track); border-radius: 3px; outline: none; cursor: pointer; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; background: var(--slider-thumb); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 3px 12px rgba(139, 69, 19, 0.4); }
-input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; background: var(--slider-thumb); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3); }
+.answer-buttons { display: flex; gap: 8px; justify-content: center; }
+.answer-btn { flex: 1; min-width: 0; padding: 14px 4px; font-size: 13px; font-weight: 400; font-family: 'Noto Sans JP', sans-serif; color: var(--text-secondary); background: var(--bg-card); border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all var(--transition); text-align: center; line-height: 1.4; -webkit-tap-highlight-color: transparent; }
+.answer-btn:hover { border-color: var(--accent-light); color: var(--accent); }
+.answer-btn:active { transform: scale(0.96); }
+.answer-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 500; }
 
 .question-nav { display: flex; justify-content: space-between; margin-top: 32px; gap: 12px; }
 .btn-nav { padding: 12px 24px; font-size: 14px; font-weight: 500; font-family: 'Noto Sans JP', sans-serif; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); }
@@ -143,7 +138,7 @@ input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; background: v
   .card { padding: 24px 20px; }
   .app-header__title { font-size: 19px; }
   .question-text { font-size: 15px; }
-  .slider-label { font-size: 10px; }
+  .answer-btn { font-size: 11px; padding: 10px 2px; }
   .btn { padding: 12px 28px; font-size: 14px; }
 }
 </style>
@@ -182,22 +177,16 @@ input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; background: v
       <div id="questionCard" class="question-card">
         <div id="questionNumber" class="question-number"></div>
         <p id="questionText" class="question-text"></p>
-        <div class="slider-container">
-          <div class="slider-labels">
-            <span class="slider-label" data-value="0" onclick="setSlider(0)">まったく<br>ない</span>
-            <span class="slider-label" data-value="25" onclick="setSlider(25)">あまり<br>ない</span>
-            <span class="slider-label" data-value="50" onclick="setSlider(50)">どちらとも</span>
-            <span class="slider-label" data-value="75" onclick="setSlider(75)">やや<br>ある</span>
-            <span class="slider-label" data-value="100" onclick="setSlider(100)">よく<br>ある</span>
-          </div>
-          <div class="slider-wrapper">
-            <input type="range" id="answerSlider" min="0" max="100" step="25" value="50">
-          </div>
+        <div class="answer-buttons">
+          <button class="answer-btn" data-value="0" onclick="selectAnswer(0)">まったく<br>ない</button>
+          <button class="answer-btn" data-value="25" onclick="selectAnswer(25)">あまり<br>ない</button>
+          <button class="answer-btn" data-value="50" onclick="selectAnswer(50)">ときどき<br>ある</button>
+          <button class="answer-btn" data-value="75" onclick="selectAnswer(75)">わりと<br>ある</button>
+          <button class="answer-btn" data-value="100" onclick="selectAnswer(100)">よく<br>ある</button>
         </div>
       </div>
       <div class="question-nav">
         <button id="btnPrev" class="btn-nav" onclick="prevQuestion()">← 戻る</button>
-        <button id="btnNext" class="btn-nav primary" onclick="nextQuestion()">次へ →</button>
       </div>
     </div>
   </div>
@@ -342,6 +331,8 @@ function initQuestions() {
   showQuestion();
 }
 
+let isTransitioning = false;
+
 function showQuestion() {
   const q = shuffledQuestions[currentIndex];
   const total = shuffledQuestions.length;
@@ -350,51 +341,38 @@ function showQuestion() {
   const pct = ((currentIndex + 1) / total) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressText').textContent = `${currentIndex + 1} / ${total}`;
-  const savedValue = answers[q.id] !== undefined ? answers[q.id] : 50;
-  document.getElementById('answerSlider').value = savedValue;
-  updateSliderLabels(savedValue);
+  const savedValue = answers[q.id];
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.toggle('selected', savedValue !== undefined && parseInt(btn.dataset.value) === savedValue);
+  });
   document.getElementById('btnPrev').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
-  document.getElementById('btnNext').textContent = currentIndex === total - 1 ? '完了 ✓' : '次へ →';
   const card = document.getElementById('questionCard');
   card.style.animation = 'none';
   card.offsetHeight;
   card.style.animation = 'fadeIn 0.4s ease';
 }
 
-function setSlider(value) {
-  document.getElementById('answerSlider').value = value;
-  updateSliderLabels(value);
-}
-
-function updateSliderLabels(value) {
-  document.querySelectorAll('.slider-label').forEach(label => {
-    const v = parseInt(label.dataset.value);
-    label.classList.toggle('active', v === parseInt(value));
-  });
-}
-
-document.getElementById('answerSlider').addEventListener('input', function() {
-  updateSliderLabels(this.value);
-});
-
-function saveCurrentAnswer() {
+function selectAnswer(value) {
+  if (isTransitioning) return;
   const q = shuffledQuestions[currentIndex];
-  answers[q.id] = parseInt(document.getElementById('answerSlider').value);
-}
-
-function nextQuestion() {
-  saveCurrentAnswer();
-  if (currentIndex < shuffledQuestions.length - 1) {
-    currentIndex++;
-    showQuestion();
-  } else {
-    gtag('event', 'student_check_complete', { course_type: 'jibun20' });
-    showScreen('screen-name');
-  }
+  answers[q.id] = value;
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
+  });
+  isTransitioning = true;
+  setTimeout(() => {
+    isTransitioning = false;
+    if (currentIndex < shuffledQuestions.length - 1) {
+      currentIndex++;
+      showQuestion();
+    } else {
+      gtag('event', 'student_check_complete', { course_type: 'jibun20' });
+      showScreen('screen-name');
+    }
+  }, 300);
 }
 
 function prevQuestion() {
-  saveCurrentAnswer();
   if (currentIndex > 0) {
     currentIndex--;
     showQuestion();
