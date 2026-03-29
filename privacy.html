@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-12W0CMVX96"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-12W0CMVX96');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プライバシーポリシー｜令和脳 vs 江戸脳 思考OSチェック</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏯</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C8860A;
+  --gold-light: #e8a82a;
+  --gold-pale: #f5e6c8;
+  --gold-dim: rgba(200,134,10,0.15);
+  --ink: #FAF6EE;
+  --ink-mid: #f5f0e8;
+  --text-main: #1a1208;
+  --text-sub: #5a4a2a;
+  --text-dim: #a08c6a;
+  --teal: #007A73;
+  --teal-dark: #005f5a;
+  --teal-dim: rgba(0,122,115,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--ink);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse at 15% 40%, rgba(200,134,10,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 30%, rgba(143,217,218,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(143,217,218,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: radial-gradient(circle, rgba(200,134,10,0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(200,134,10,0.15);
+  background: rgba(250,246,238,0.92);
+  backdrop-filter: blur(12px);
+}
+.header-logo {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: 0.2em;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+}
+
+.v-line {
+  position: fixed;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(200,134,10,0.2), transparent);
+  top: 0; bottom: 0; z-index: 0;
+}
+.v-line.left { left: 40px; }
+.v-line.right { right: 40px; }
+
+.content {
+  position: relative; z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 140px 24px 80px;
+}
+
+.page-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: center;
+  margin-bottom: 48px;
+  letter-spacing: 0.1em;
+}
+
+.page-body {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(200,134,10,0.12);
+  border-radius: 16px;
+  padding: 48px 40px;
+  line-height: 2;
+  font-size: 15px;
+  color: var(--text-sub);
+}
+
+.section-heading {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 36px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(200,134,10,0.15);
+}
+.section-heading:first-child {
+  margin-top: 0;
+}
+
+.page-body p {
+  margin-bottom: 16px;
+}
+
+.page-body ul {
+  margin-bottom: 16px;
+  padding-left: 1.5em;
+}
+.page-body li {
+  margin-bottom: 8px;
+}
+
+.email-link {
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,122,115,0.3);
+  transition: color 0.2s, border-color 0.2s;
+}
+.email-link:hover {
+  color: var(--teal-dark);
+  border-color: var(--teal-dark);
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 14px;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--gold); }
+
+.footer {
+  position: relative; z-index: 1;
+  padding: 24px 40px;
+  border-top: 1px solid rgba(200,134,10,0.1);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-copy {
+  font-size: 13px; color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.footer-links {
+  display: flex; gap: 20px;
+}
+.footer-links a {
+  font-size: 13px; color: var(--text-dim);
+  text-decoration: none; letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+@media (max-width: 600px) {
+  .header { padding: 14px 20px; }
+  .v-line { display: none; }
+  .content { padding: 120px 16px 60px; }
+  .page-body { padding: 32px 24px; }
+  .footer { flex-direction: column; align-items: center; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="v-line left"></div>
+<div class="v-line right"></div>
+
+<header class="header">
+  <a href="reiwa_vs_edo_top_v2.html" class="header-logo">令和脳 vs 江戸脳</a>
+</header>
+
+<main class="content">
+  <h1 class="page-title">プライバシーポリシー</h1>
+  <div class="page-body">
+    <p>NPO法人 他力本願研究所（以下「当団体」）は、「令和脳 vs 江戸脳 思考OSチェック」（以下「本チェックツール」）におけるユーザーの個人情報の取り扱いについて、以下のとおり定めます。</p>
+
+    <h2 class="section-heading">回答データについて</h2>
+    <p>本チェックツールは、診断の回答データをサーバーに保存しません。すべての処理はお使いのブラウザ上で完結し、回答内容が外部に送信されることはありません。</p>
+
+    <h2 class="section-heading">アクセス解析について</h2>
+    <p>本チェックツールでは、サービス改善を目的として Google Analytics 4（GA4）を使用しています。</p>
+    <p>Google Analytics では、匿名のアクセス情報（ページ閲覧数、操作ログ、利用デバイス等）を収集しますが、個人を特定する情報は取得しません。</p>
+    <p>収集されたデータは Google のプライバシーポリシーに基づき管理されます。詳細は <a href="https://policies.google.com/privacy" target="_blank" class="email-link">Google プライバシーポリシー</a> をご確認ください。</p>
+
+    <h2 class="section-heading">Cookie の使用について</h2>
+    <p>本チェックツールでは、Google Analytics によるアクセス解析のために Cookie を使用しています。Cookie とは、ウェブサイトがブラウザに保存する小さなデータファイルです。</p>
+    <p>Cookie はブラウザの設定により無効にすることができますが、その場合、一部の機能が正常に動作しない場合があります。</p>
+
+    <h2 class="section-heading">お問い合わせ</h2>
+    <p>本ポリシーに関するお問い合わせは、下記までご連絡ください。</p>
+    <p>NPO法人 他力本願研究所<br>
+    メール：<a href="mailto:tariki.labo@gmail.com" class="email-link">tariki.labo@gmail.com</a></p>
+  </div>
+  <a href="reiwa_vs_edo_top_v2.html" class="back-link">← トップページに戻る</a>
+</main>
+
+<footer class="footer">
+  <p class="footer-copy">© 2026 NPO法人 他力本願研究所｜令和脳 vs 江戸脳 思考OSチェック</p>
+  <div class="footer-links">
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="contact.html">お問い合わせ</a>
+  </div>
+</footer>
+
+</body>
+</html>

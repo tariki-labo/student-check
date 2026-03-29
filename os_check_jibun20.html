@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>受講生用 思考OSチェック｜自分2.0講座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-12W0CMVX96"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-12W0CMVX96');
+</script>
+
+<style>
+:root {
+  --bg-primary: #f5f0e8;
+  --bg-card: #fffbf5;
+  --text-primary: #2c2418;
+  --text-secondary: #5a4a3a;
+  --text-muted: #8a7a6a;
+  --accent: #8b4513;
+  --accent-light: #c4956a;
+  --accent-dark: #5a2d0c;
+  --border: #d4c5b0;
+  --border-light: #e8ddd0;
+  --slider-track: #d4c5b0;
+  --slider-thumb: #8b4513;
+  --shadow: 0 2px 12px rgba(44, 36, 24, 0.08);
+  --shadow-lg: 0 4px 24px rgba(44, 36, 24, 0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.3s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.8;
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(ellipse at 20% 50%, rgba(139, 69, 19, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(196, 149, 106, 0.04) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+.app-header { text-align: center; padding: 40px 0 20px; }
+.app-header__badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--accent); background: rgba(139, 69, 19, 0.08); border: 1px solid rgba(139, 69, 19, 0.15); padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; }
+.app-header__title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; line-height: 1.4; }
+.app-header__subtitle { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
+
+.card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 28px; margin-bottom: 24px; }
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+.password-section { text-align: center; padding: 60px 0; }
+.password-section__icon { font-size: 40px; margin-bottom: 20px; }
+.password-section__heading { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.password-section__desc { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+.password-input { width: 100%; max-width: 300px; padding: 12px 16px; font-size: 16px; font-family: 'Noto Sans JP', sans-serif; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fff; text-align: center; outline: none; transition: border-color var(--transition); }
+.password-input:focus { border-color: var(--accent); }
+.password-error { color: #c0392b; font-size: 13px; margin-top: 8px; min-height: 20px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 36px; font-size: 15px; font-weight: 500; font-family: 'Noto Sans JP', sans-serif; color: #fff; background: var(--accent); border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all var(--transition); margin-top: 20px; }
+.btn:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.progress-bar { width: 100%; height: 4px; background: var(--border-light); border-radius: 2px; margin: 20px 0 8px; overflow: hidden; }
+.progress-bar__fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 2px; transition: width 0.4s ease; }
+.progress-text { text-align: right; font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
+
+.question-card { min-height: 320px; display: flex; flex-direction: column; justify-content: center; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.question-number { font-size: 12px; font-weight: 500; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 12px; }
+.question-text { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 600; line-height: 1.8; color: var(--text-primary); margin-bottom: 36px; }
+
+.slider-container { padding: 0 4px; }
+.slider-labels { display: flex; justify-content: space-between; margin-bottom: 16px; }
+.slider-label { font-size: 11px; color: var(--text-muted); text-align: center; flex: 1; position: relative; cursor: pointer; padding: 4px 0; transition: color var(--transition); }
+.slider-label.active { color: var(--accent); font-weight: 500; }
+.slider-wrapper { position: relative; padding: 8px 0; }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: var(--slider-track); border-radius: 3px; outline: none; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 28px; height: 28px; background: var(--slider-thumb); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 3px 12px rgba(139, 69, 19, 0.4); }
+input[type="range"]::-moz-range-thumb { width: 28px; height: 28px; background: var(--slider-thumb); border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3); }
+
+.question-nav { display: flex; justify-content: space-between; margin-top: 32px; gap: 12px; }
+.btn-nav { padding: 12px 24px; font-size: 14px; font-weight: 500; font-family: 'Noto Sans JP', sans-serif; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); }
+.btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+.btn-nav.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-nav.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+.name-section { text-align: center; padding: 40px 0; }
+.name-section__heading { font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+.name-section__desc { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.7; }
+.name-input { width: 100%; max-width: 320px; padding: 12px 16px; font-size: 16px; font-family: 'Noto Sans JP', sans-serif; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fff; text-align: center; outline: none; transition: border-color var(--transition); }
+.name-input:focus { border-color: var(--accent); }
+.name-input::placeholder { color: var(--border); }
+.privacy-note { font-size: 11px; color: var(--text-muted); margin-top: 16px; line-height: 1.6; }
+
+.result-section { padding: 20px 0 60px; }
+.result-heading { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 8px; }
+.result-name { text-align: center; font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+
+.chart-container { position: relative; width: 100%; max-width: 400px; margin: 0 auto 32px; aspect-ratio: 1; }
+.chart-container canvas { width: 100% !important; height: 100% !important; }
+
+.score-list { list-style: none; margin-bottom: 32px; }
+.score-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+.score-item:last-child { border-bottom: none; }
+.score-item__label { font-size: 14px; font-weight: 500; }
+.score-item__bar-wrap { flex: 1; margin: 0 16px; height: 6px; background: var(--border-light); border-radius: 3px; overflow: hidden; }
+.score-item__bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 3px; transition: width 0.8s ease; }
+.score-item__value { font-size: 14px; font-weight: 700; color: var(--accent); min-width: 36px; text-align: right; }
+
+.result-note { background: rgba(139, 69, 19, 0.05); border: 1px solid rgba(139, 69, 19, 0.1); border-radius: var(--radius-sm); padding: 16px 20px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+.send-status { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+.send-status.success { color: #27ae60; }
+.send-status.error { color: #c0392b; }
+
+.app-footer { text-align: center; padding: 24px 0 40px; font-size: 11px; color: var(--text-muted); }
+.app-footer a { color: var(--text-muted); text-decoration: none; margin: 0 8px; }
+.app-footer a:hover { color: var(--accent); }
+
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .card { padding: 24px 20px; }
+  .app-header__title { font-size: 19px; }
+  .question-text { font-size: 15px; }
+  .slider-label { font-size: 10px; }
+  .btn { padding: 12px 28px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="app-header">
+    <div class="app-header__badge">受講生用 思考OSチェック</div>
+    <h1 class="app-header__title">自分らしくラクに生きる！<br>自分2.0講座</h1>
+    <p class="app-header__subtitle">NPO法人 他力本願研究所</p>
+  </header>
+
+  <!-- 画面1: パスワード -->
+  <div id="screen-password" class="screen active">
+    <div class="card">
+      <div class="password-section">
+        <div class="password-section__icon">🔐</div>
+        <h2 class="password-section__heading">パスワードを入力してください</h2>
+        <p class="password-section__desc">受講者専用のパスワードを入力してください</p>
+        <input type="password" id="passwordInput" class="password-input" placeholder="パスワード" autocomplete="off">
+        <div id="passwordError" class="password-error"></div>
+        <br>
+        <button class="btn" onclick="checkPassword()">はじめる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 画面2: 質問 -->
+  <div id="screen-questions" class="screen">
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-bar__fill" style="width: 0%"></div>
+    </div>
+    <div id="progressText" class="progress-text">1 / 27</div>
+    <div class="card">
+      <div id="questionCard" class="question-card">
+        <div id="questionNumber" class="question-number"></div>
+        <p id="questionText" class="question-text"></p>
+        <div class="slider-container">
+          <div class="slider-labels">
+            <span class="slider-label" data-value="0" onclick="setSlider(0)">まったく<br>ない</span>
+            <span class="slider-label" data-value="25" onclick="setSlider(25)">あまり<br>ない</span>
+            <span class="slider-label" data-value="50" onclick="setSlider(50)">どちらとも</span>
+            <span class="slider-label" data-value="75" onclick="setSlider(75)">やや<br>ある</span>
+            <span class="slider-label" data-value="100" onclick="setSlider(100)">よく<br>ある</span>
+          </div>
+          <div class="slider-wrapper">
+            <input type="range" id="answerSlider" min="0" max="100" step="25" value="50">
+          </div>
+        </div>
+      </div>
+      <div class="question-nav">
+        <button id="btnPrev" class="btn-nav" onclick="prevQuestion()">← 戻る</button>
+        <button id="btnNext" class="btn-nav primary" onclick="nextQuestion()">次へ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 画面3: 名前入力 -->
+  <div id="screen-name" class="screen">
+    <div class="card">
+      <div class="name-section">
+        <h2 class="name-section__heading">OSチェック完了！</h2>
+        <p class="name-section__desc">
+          結果を表示する前に、お名前を入力してください。<br>
+          フルネームでもニックネームでも構いません。
+        </p>
+        <input type="text" id="nameInput" class="name-input" placeholder="お名前">
+        <p class="privacy-note">
+          ※ 回答データは前川にのみ送信されます。<br>
+          第三者に共有されることはありません。
+        </p>
+        <br>
+        <button class="btn" onclick="submitAndShowResult()" id="btnSubmit">結果を見る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 画面4: 結果 -->
+  <div id="screen-result" class="screen">
+    <div class="result-section">
+      <h2 class="result-heading">あなたの思考OSチェック結果</h2>
+      <p id="resultName" class="result-name"></p>
+      <div class="card">
+        <div class="chart-container">
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <ul id="scoreList" class="score-list"></ul>
+      </div>
+      <div class="card">
+        <div class="result-note">
+          この結果は、あなたの中で朱子学OSがどのように作動しているかを可視化したものです。スコアが高いカテゴリほど、無意識に朱子学的な思考パターンが起動しやすい傾向があります。講座の中で、前川と一緒にこのOSを書き換えていきましょう。
+        </div>
+      </div>
+      <div id="sendStatus" class="send-status"></div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <p>
+      <a href="privacy.html" target="_blank">プライバシーポリシー</a>
+      <a href="contact.html" target="_blank">お問い合わせ</a>
+    </p>
+    <p style="margin-top: 8px;">© NPO法人 他力本願研究所</p>
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// 【パスワード設定】
+// パスワードを変更したい場合は、下の値を書き換えてください
+// ============================================================
+const CORRECT_PASSWORD = "jibun20_2026";
+
+// ============================================================
+// 【GAS送信先URL】
+// Google Apps ScriptのデプロイURLに書き換えてください
+// ============================================================
+const GAS_URL = "YOUR_GAS_DEPLOY_URL";
+
+// ============================================================
+// 設問データ（自分2.0講座用・27問）
+// OS測定22問 ＋ 脳の回復段階5問
+// type: "os" = OS測定（レーダーチャートに反映）
+// type: "brain" = 脳の回復段階（レーダーチャートには含めない）
+// ============================================================
+const QUESTIONS = [
+  // OS測定22問
+  { id: "Q1",  text: "つらい時でも「迷惑をかけたくない」と思い、誰かに助けを求められない", cats: ["自己否定", "世間体・恥の文化"], type: "os" },
+  { id: "Q2",  text: "怒りや悲しみを感じても、そんな感情を見せるのはみっともないと思い、表に出さない", cats: ["自己否定", "世間体・恥の文化"], type: "os" },
+  { id: "Q3",  text: "弱さや不調を抱えている自分を情けないと感じ、周囲に知られたくないと思う", cats: ["自己否定", "世間体・恥の文化"], type: "os" },
+  { id: "Q4",  text: "目上の人と意見が違う時、自分の方が間違っていると思い、合わせてしまう", cats: ["自己否定", "権威服従"], type: "os" },
+  { id: "Q5",  text: "「お前にはどうせ無理だ」など、親や教師から言われた否定的な言葉が、今でも頭の中で繰り返される", cats: ["自己否定", "権威服従"], type: "os" },
+  { id: "Q6",  text: "学歴や肩書きなど、社会的に「上」とされるものを持っていない自分はダメだと感じる", cats: ["自己否定", "権威服従"], type: "os" },
+  { id: "Q7",  text: "職場や家庭でトラブルが起きた時、本来自分の責任ではなくても、「自分が我慢すれば丸く収まる」と思い、言いたいことを飲み込んでしまう", cats: ["自己否定", "課題の混同"], type: "os" },
+  { id: "Q8",  text: "話をしている相手の機嫌が悪くなると、自分が何か悪いことをしたのではないかと感じる", cats: ["自己否定", "課題の混同"], type: "os" },
+  { id: "Q9",  text: "仕事が終わらない時、「自分の能力が足りないせいだ」と思い、サービス残業や休日出勤で埋め合わせようとしてしまう", cats: ["自己否定", "課題の混同"], type: "os" },
+  { id: "Q10", text: "親や上司に「これやっといて」と言われると、それが自分の仕事でなくても引き受けてしまう", cats: ["権威服従", "課題の混同"], type: "os" },
+  { id: "Q11", text: "進路や転職など自分の人生に関わることでも、親や上司の意見に従わなければと感じる", cats: ["権威服従", "課題の混同"], type: "os" },
+  { id: "Q12", text: "後輩や部下に対して、「自分がそうされてきたように」指導や助言をしなければと感じ、頼まれていないのに口を出してしまう", cats: ["権威服従", "課題の混同"], type: "os" },
+  { id: "Q13", text: "休職や休養が必要だと言われても、「周囲に迷惑をかける」と罪悪感を感じ、踏み切れない", cats: ["世間体・恥の文化", "完璧主義"], type: "os" },
+  { id: "Q14", text: "仕事や家事でちょっとでも手を抜くと、「ちゃんとしていない人だと思われるのでは」と不安に感じてしまう", cats: ["世間体・恥の文化", "完璧主義"], type: "os" },
+  { id: "Q15", text: "飲み会や集まりに参加したくなくても、「断ったら付き合いが悪いと思われる」と感じ、参加してしまう", cats: ["世間体・恥の文化", "集団同調"], type: "os" },
+  { id: "Q16", text: "周囲と違う行動を取ろうとした時、「変な人だと思われるのではないか」と世間の目が気になって躊躇する", cats: ["世間体・恥の文化", "集団同調"], type: "os" },
+  { id: "Q17", text: "自分では「おかしい」と感じていても、周囲が「普通だ」と言うと、「自分の感覚がおかしいのだ」と思ってしまう", cats: ["自己否定", "集団同調"], type: "os" },
+  { id: "Q18", text: "SNSで知人の充実した投稿を見ると、「自分だけが取り残されている」と感じる", cats: ["自己否定", "集団同調"], type: "os" },
+  { id: "Q19", text: "「親の言うことには逆らうな」「年長者を敬え」と言われて育ち、今でもそれに従ってしまう", cats: ["権威服従", "認知の硬直性"], type: "os" },
+  { id: "Q20", text: "「石の上にも三年」「途中で投げ出すな」という考えが頭にあり、辞める決断ができない", cats: ["権威服従", "認知の硬直性"], type: "os" },
+  { id: "Q21", text: "仕事や家事の手順にこだわりがあり、人に任せると理想通りにやってもらえないと感じて、自分でやってしまう", cats: ["認知の硬直性", "完璧主義"], type: "os" },
+  { id: "Q22", text: "やると決めたことは、体調が悪くても予定通り全部こなさないと気が済まない", cats: ["認知の硬直性", "完璧主義"], type: "os" },
+
+  // 脳の回復段階5問
+  { id: "Q23", text: "夜、寝つけなかったり、途中で何度も目が覚めたりする日が続いている", cats: ["脳の回復段階"], type: "brain" },
+  { id: "Q24", text: "着替えや入浴など、日常の基本的なことをこなすのがつらいと感じる", cats: ["脳の回復段階"], type: "brain" },
+  { id: "Q25", text: "本や記事を読もうとしても、内容が頭に入ってこない", cats: ["脳の回復段階"], type: "brain" },
+  { id: "Q26", text: "些細なことで涙が止まらなくなったり、感情が抑えられなくなったりすることがある", cats: ["脳の回復段階"], type: "brain" },
+  { id: "Q27", text: "以前は楽しめていたことに、興味や意欲が湧かなくなっている", cats: ["脳の回復段階"], type: "brain" },
+];
+
+// カテゴリ定義（レーダーチャート表示順）
+const CATEGORIES = ["自己否定", "権威服従", "世間体・恥の文化", "課題の混同", "完璧主義", "集団同調", "認知の硬直性"];
+
+let shuffledQuestions = [];
+let currentIndex = 0;
+let answers = {};
+
+function checkPassword() {
+  const input = document.getElementById('passwordInput').value;
+  if (input === CORRECT_PASSWORD) {
+    document.getElementById('passwordError').textContent = '';
+    showScreen('screen-questions');
+    initQuestions();
+    gtag('event', 'student_check_start', { course_type: 'jibun20' });
+  } else {
+    document.getElementById('passwordError').textContent = 'パスワードが正しくありません';
+  }
+}
+
+document.getElementById('passwordInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPassword();
+});
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function initQuestions() {
+  // 全27問（OS測定22問 + 脳の回復段階5問）を混ぜてシャッフル
+  shuffledQuestions = [...QUESTIONS].sort(() => Math.random() - 0.5);
+  currentIndex = 0;
+  answers = {};
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = shuffledQuestions[currentIndex];
+  const total = shuffledQuestions.length;
+  document.getElementById('questionNumber').textContent = `Q${currentIndex + 1}`;
+  document.getElementById('questionText').textContent = q.text;
+  const pct = ((currentIndex + 1) / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${currentIndex + 1} / ${total}`;
+  const savedValue = answers[q.id] !== undefined ? answers[q.id] : 50;
+  document.getElementById('answerSlider').value = savedValue;
+  updateSliderLabels(savedValue);
+  document.getElementById('btnPrev').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+  document.getElementById('btnNext').textContent = currentIndex === total - 1 ? '完了 ✓' : '次へ →';
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'fadeIn 0.4s ease';
+}
+
+function setSlider(value) {
+  document.getElementById('answerSlider').value = value;
+  updateSliderLabels(value);
+}
+
+function updateSliderLabels(value) {
+  document.querySelectorAll('.slider-label').forEach(label => {
+    const v = parseInt(label.dataset.value);
+    label.classList.toggle('active', v === parseInt(value));
+  });
+}
+
+document.getElementById('answerSlider').addEventListener('input', function() {
+  updateSliderLabels(this.value);
+});
+
+function saveCurrentAnswer() {
+  const q = shuffledQuestions[currentIndex];
+  answers[q.id] = parseInt(document.getElementById('answerSlider').value);
+}
+
+function nextQuestion() {
+  saveCurrentAnswer();
+  if (currentIndex < shuffledQuestions.length - 1) {
+    currentIndex++;
+    showQuestion();
+  } else {
+    gtag('event', 'student_check_complete', { course_type: 'jibun20' });
+    showScreen('screen-name');
+  }
+}
+
+function prevQuestion() {
+  saveCurrentAnswer();
+  if (currentIndex > 0) {
+    currentIndex--;
+    showQuestion();
+  }
+}
+
+// ============================================================
+// スコア算出
+// ============================================================
+function calculateScores() {
+  const catScores = {};
+  const catCounts = {};
+  CATEGORIES.forEach(cat => { catScores[cat] = 0; catCounts[cat] = 0; });
+
+  // OS測定問のみでカテゴリスコアを算出
+  QUESTIONS.filter(q => q.type === "os").forEach(q => {
+    const val = answers[q.id] !== undefined ? answers[q.id] : 50;
+    q.cats.forEach(cat => {
+      catScores[cat] += val;
+      catCounts[cat]++;
+    });
+  });
+
+  const result = {};
+  CATEGORIES.forEach(cat => {
+    result[cat] = catCounts[cat] > 0 ? Math.round(catScores[cat] / catCounts[cat]) : 0;
+  });
+  return result;
+}
+
+function calculateBrainRecoveryScore() {
+  const brainQuestions = QUESTIONS.filter(q => q.type === "brain");
+  let total = 0;
+  let count = 0;
+  brainQuestions.forEach(q => {
+    const val = answers[q.id] !== undefined ? answers[q.id] : 50;
+    total += val;
+    count++;
+  });
+  return count > 0 ? Math.round(total / count) : 0;
+}
+
+// ============================================================
+// 送信 & 結果表示
+// ============================================================
+async function submitAndShowResult() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) {
+    document.getElementById('nameInput').style.borderColor = '#c0392b';
+    document.getElementById('nameInput').focus();
+    return;
+  }
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  const categoryScores = calculateScores();
+  const brainRecoveryScore = calculateBrainRecoveryScore();
+
+  try {
+    const payload = {
+      timestamp: new Date().toISOString(),
+      name: name,
+      course_type: "jibun20",
+      answers: QUESTIONS.map(q => answers[q.id] !== undefined ? answers[q.id] : 50),
+      category_scores: CATEGORIES.map(cat => categoryScores[cat]),
+      brain_recovery_score: brainRecoveryScore,
+    };
+
+    if (GAS_URL !== "YOUR_GAS_DEPLOY_URL") {
+      await fetch(GAS_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      document.getElementById('sendStatus').textContent = '✓ データが送信されました';
+      document.getElementById('sendStatus').className = 'send-status success';
+    } else {
+      document.getElementById('sendStatus').textContent = '※ 送信先が未設定のため、データは送信されていません';
+      document.getElementById('sendStatus').className = 'send-status error';
+    }
+
+    gtag('event', 'student_check_submit', { course_type: 'jibun20' });
+  } catch (err) {
+    console.error("送信エラー:", err);
+    document.getElementById('sendStatus').textContent = '送信に失敗しました。結果は正常に表示されています。';
+    document.getElementById('sendStatus').className = 'send-status error';
+  }
+
+  showResult(name, categoryScores);
+}
+
+function showResult(name, scores) {
+  showScreen('screen-result');
+  document.getElementById('resultName').textContent = `${name} さんの結果`;
+
+  const listEl = document.getElementById('scoreList');
+  listEl.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const li = document.createElement('li');
+    li.className = 'score-item';
+    li.innerHTML = `
+      <span class="score-item__label">${cat}</span>
+      <div class="score-item__bar-wrap">
+        <div class="score-item__bar" style="width: 0%"></div>
+      </div>
+      <span class="score-item__value">${scores[cat]}</span>
+    `;
+    listEl.appendChild(li);
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll('.score-item__bar').forEach((bar, i) => {
+      bar.style.width = scores[CATEGORIES[i]] + '%';
+    });
+  }, 100);
+
+  drawRadarChart(scores);
+}
+
+function drawRadarChart(scores) {
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: CATEGORIES,
+      datasets: [{
+        label: '朱子学OSスコア',
+        data: CATEGORIES.map(cat => scores[cat]),
+        backgroundColor: 'rgba(139, 69, 19, 0.15)',
+        borderColor: 'rgba(139, 69, 19, 0.7)',
+        borderWidth: 2,
+        pointBackgroundColor: 'rgba(139, 69, 19, 0.9)',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { stepSize: 25, font: { size: 10, family: "'Noto Sans JP', sans-serif" }, color: '#8a7a6a', backdropColor: 'transparent' },
+          grid: { color: 'rgba(212, 197, 176, 0.5)' },
+          angleLines: { color: 'rgba(212, 197, 176, 0.5)' },
+          pointLabels: { font: { size: 12, family: "'Noto Sans JP', sans-serif", weight: '500' }, color: '#2c2418' },
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.label + '：' + ctx.raw + ' / 100'; } } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
